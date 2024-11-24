@@ -32,12 +32,17 @@ app.get('/info', (req, res) => {
     )
 })
 
-app.get('/api/persons/:id', (req, res) => {
-    res.json(data.find(item => item.id === req.params.id));
-})
-
 app.get('/api/persons', (req, res) => {
     res.json(data);
+})
+
+app.get('/api/persons/:id', (req, res) => {
+    const note = data.find(item => item.id === req.params.id);
+    if (note) {
+        res.json(note);
+    } else {
+        res.status(404).end();
+    }
 })
 
 const PORT = 3001
