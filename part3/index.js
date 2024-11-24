@@ -23,10 +23,6 @@ const data = [
     }
 ];
 
-app.get('/api/persons', (req, res) => {
-    res.json(data);
-})
-
 app.get('/info', (req, res) => {
     res.send(
         `<div>
@@ -34,6 +30,14 @@ app.get('/info', (req, res) => {
             <span>${new Date()}</span>
         </div>`
     )
+})
+
+app.get('/api/persons/:id', (req, res) => {
+    res.json(data.find(item => item.id === req.params.id));
+})
+
+app.get('/api/persons', (req, res) => {
+    res.json(data);
 })
 
 const PORT = 3001
