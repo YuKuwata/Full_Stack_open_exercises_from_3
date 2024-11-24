@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+app.use(express.json())
 let data = [
     {
         "id": "1",
@@ -22,6 +23,14 @@ let data = [
         "number": "39-23-6423122"
     }
 ];
+
+const generateId = () => {
+    const newId = `${Math.floor(Math.random()*10)}`;
+    if (data.some(item => item.id === newId)) {
+        return generateId();
+    }
+    return newId;
+}
 
 app.get('/info', (req, res) => {
     res.send(
@@ -54,6 +63,14 @@ app.delete('/api/persons/:id', (req, res) => {
         res.status(204).end();
         console.log(data);
     }
+})
+
+app.post('/api/persons', (req, res) => {
+    const body = req.body;
+    const newId = generateId();
+    data.push({ ...body, id: newId });
+    console.log(data);
+    res.json(data);
 })
 
 const PORT = 3001
