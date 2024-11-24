@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const data = [
+let data = [
     {
         "id": "1",
         "name": "Arto Hellas",
@@ -42,6 +42,17 @@ app.get('/api/persons/:id', (req, res) => {
         res.json(note);
     } else {
         res.status(404).end();
+    }
+})
+
+app.delete('/api/persons/:id', (req, res) => {
+    const note = data.find(item => item.id === req.params.id);
+    if (!note) {
+        res.status(401).end();
+    } else {
+        data = data.filter(item => item.id !== req.params.id);
+        res.status(204).end();
+        console.log(data);
     }
 })
 
