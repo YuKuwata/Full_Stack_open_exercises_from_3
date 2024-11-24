@@ -25,7 +25,7 @@ let data = [
 ];
 
 const generateId = () => {
-    const newId = `${Math.floor(Math.random()*10)}`;
+    const newId = `${Math.floor(Math.random() * 10)}`;
     if (data.some(item => item.id === newId)) {
         return generateId();
     }
@@ -67,6 +67,10 @@ app.delete('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
     const body = req.body;
+    if (!body.name || data.some(item => item.name === body.name)) {
+        res.status(400).json({ error: 'name must be unique' });
+        return;
+    }
     const newId = generateId();
     data.push({ ...body, id: newId });
     console.log(data);
