@@ -1,8 +1,27 @@
 const express = require('express');
 const morgan = require('morgan');
+const _ = require('lodash');
+// morgan.token('custom-ip', function (req, res) {
+//     return res;
+// });
 const app = express();
 app.use(express.json());
-app.use(morgan('tiny'));
+app.use((req, res, next) => {
+    const originalJson = res.json;
+
+    // 重写 res.json 方法
+    res.json = function (body) {
+        res.locals = JSON.stringify(body); // 保存响应的 JSON 数据
+        return originalJson.call(this, body); // 调用原始的 res.json 方法
+    };
+
+    next();
+});
+morgan.token('response-body', (req, res) => {
+    return JSON.stringify(_.omit(JSON.parse(res.locals), 'id')) || ''; // 输出捕获的 JSON 数据
+});
+// app.use(morgan('tiny'));
+app.use(morgan(':method :url :status :response-time ms :response-body'));
 let data = [
     {
         "id": "1",
