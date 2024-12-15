@@ -1,11 +1,13 @@
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
 const _ = require('lodash');
 // morgan.token('custom-ip', function (req, res) {
 //     return res;
 // });
 const app = express();
 app.use(express.json());
+app.use(cors());
 app.use((req, res, next) => {
     const originalJson = res.json;
 
